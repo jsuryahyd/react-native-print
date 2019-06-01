@@ -109,7 +109,11 @@ RCT_EXPORT_METHOD(selectPrinter:(RCTPromiseResolveBlock)resolve
     
     void (^completionHandler)(UIPrinterPickerController *, BOOL, NSError *) =
     ^(UIPrinterPickerController *printerPicker, BOOL userDidSelect, NSError *error) {
-        if (!userDidSelect && error) {
+       if (!userDidSelect) {
+            NSLog(@"Printing could not complete because of error: %@", error);
+            return reject(RCTErrorUnspecified, nil, RCTErrorWithMessage(@"User cancelled printing."));
+        }
+        if ( error) {
             NSLog(@"Printing could not complete because of error: %@", error);
             reject(RCTErrorUnspecified, nil, RCTErrorWithMessage(error.description));
         } else {
